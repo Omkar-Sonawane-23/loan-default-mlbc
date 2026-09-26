@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+*.log
+
+# Node / React / Vite
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# Hardhat
+blockchain/cache/
+blockchain/artifacts/
+blockchain/typechain-types/
+blockchain/deployed-address.json
+
+# Environment
+.env
+.env.local
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.tsbuildinfo
+
+# ML generated artifacts (regenerable via scripts; trained model IS kept if small enough)
+ml/data/processed/*.json
+
+# Editor
+.vscode/
+.idea/

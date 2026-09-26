@@ -1,0 +1,93 @@
+{
+  "model_name": "Logistic Regression",
+  "model_version": "v1-logistic-regression",
+  "trained_at": "2026-09-26T07:02:48.204114+00:00",
+  "dataset_path": "demo_loan_data.csv",
+  "dataset_size": 6000,
+  "train_size": 4800,
+  "test_size": 1200,
+  "features": [
+    "age",
+    "annual_income",
+    "employment_years",
+    "credit_score",
+    "loan_amount",
+    "loan_term_months",
+    "existing_debt",
+    "debt_to_income_ratio",
+    "number_of_previous_loans",
+    "previous_default",
+    "dependents",
+    "savings_amount",
+    "employment_type",
+    "requested_loan_purpose"
+  ],
+  "target": "loan_default",
+  "random_seed": 42,
+  "metrics": {
+    "accuracy": 0.8658,
+    "precision": 0.8224,
+    "recall": 0.4826,
+    "f1_score": 0.6083,
+    "roc_auc": 0.8626,
+    "training_time_seconds": 0.033
+  },
+  "feature_importance": [
+    {
+      "feature": "num__credit_score",
+      "importance": 1.00575
+    },
+    {
+      "feature": "num__debt_to_income_ratio",
+      "importance": 0.8437
+    },
+    {
+      "feature": "cat__employment_type_Salaried",
+      "importance": 0.55543
+    },
+    {
+      "feature": "cat__employment_type_Self-Employed",
+      "importance": 0.49759
+    },
+    {
+      "feature": "num__previous_default",
+      "importance": 0.43975
+    },
+    {
+      "feature": "cat__employment_type_Unemployed",
+      "importance": 0.4065
+    },
+    {
+      "feature": "cat__employment_type_Business Owner",
+      "importance": 0.35929
+    },
+    {
+      "feature": "cat__requested_loan_purpose_Personal",
+      "importance": 0.327
+    },
+    {
+      "feature": "num__employment_years",
+      "importance": 0.27428
+    },
+    {
+      "feature": "cat__requested_loan_purpose_Education",
+      "importance": 0.26138
+    },
+    {
+      "feature": "num__annual_income",
+      "importance": 0.24546
+    },
+    {
+      "feature": "num__loan_amount",
+      "importance": 0.23666
+    }
+  ],
+  "feature_importance_method": "absolute value of logistic regression coefficients",
+  "candidate_models_compared": [
+    "Logistic Regression",
+    "Decision Tree",
+    "Random Forest",
+    "Gradient Boosting"
+  ],
+  "notice": "This model is trained on a SYNTHETIC dataset generated for academic demonstration only. It is not validated for real financial decisions."
+}

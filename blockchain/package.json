@@ -1,0 +1,20 @@
+{
+  "name": "loan-default-mlbc-blockchain",
+  "version": "1.0.0",
+  "description": "Solidity smart contract and Hardhat project for LoanDefault MLBC academic project",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "verify:local": "hardhat run scripts/verify-local.ts --network localhost"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0",
+    "typescript": "^5.4.0",
+    "ts-node": "^10.9.2",
+    "@types/node": "^20.11.0"
+  },
+  "license": "MIT"
+}

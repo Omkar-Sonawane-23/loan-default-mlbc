@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: loan-default-mlbc-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: loan_default_mlbc
+
+volumes:
+  mongodb_data:
+    name: loan-default-mlbc-mongodb-data
