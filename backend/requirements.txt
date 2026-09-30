@@ -4,6 +4,7 @@ pydantic==2.13.5
 pandas==3.0.2
 numpy==2.4.4
 scikit-learn==1.8.0
+shap==0.48.0
 joblib==1.5.3
 pymongo==4.18.1
 web3==8.0.0

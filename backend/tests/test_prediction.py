@@ -18,6 +18,33 @@ def test_prediction_endpoint_returns_real_scores(client, ml_model_available):
     assert data["model_version"]
     assert "disclaimer" in data
     assert isinstance(data["risk_factors"], list)
+    assert 0 <= data["credit_score"] <= 1000
+    assert data["credit_score"] == round((1 - data["default_probability"]) * 1000)
+    assert len(data["model_hash"]) == 64
+    assert data["expected_loss"] >= 0
+    assert data["expected_loss"] == pytest.approx(data["default_probability"] * 0.45 * SAMPLE_FEATURES["loan_amount"], abs=0.01)
+    assert data["expected_loss_assumptions"]["formula"] == "PD × LGD × EAD"
+    assert "synthetic" in data["credit_score_validity"].lower()
+    assert "calibrated" in data["credit_score_method"].lower()
+    assert data["storage_status"] in ("STORED", "UNAVAILABLE")
+    assert "not a local explanation" in data["explanation_scope"]
+    assert data["local_explanation"]["method"] == "SHAP"
+    assert data["local_explanation"]["status"] == "AVAILABLE"
+    assert data["local_explanation"]["contributors"]
+
+
+def test_prediction_is_logged_for_monitoring(client, ml_model_available):
+    if not ml_model_available:
+        pytest.skip("ML model not trained yet")
+    response = client.post("/api/predictions", json={"input_features": SAMPLE_FEATURES})
+    assert response.status_code == 200
+    # The test client database is injected through FastAPI dependency overrides.
+    from app.dependencies import get_database
+    db = client.app.dependency_overrides[get_database]()
+    event = db.model_predictions.find_one()
+    assert event is not None
+    assert event["data_source"] == "user_provided"
+    assert event["prediction"]["model_version"]
 
 
 def test_prediction_rejects_invalid_credit_score(client):

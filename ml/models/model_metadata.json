@@ -1,11 +1,32 @@
 {
   "model_name": "Logistic Regression",
   "model_version": "v1-logistic-regression",
-  "trained_at": "2026-09-26T07:02:48.204114+00:00",
+  "artifact_sha256": "eb773a4a6801e043e100077123af84f1bbe661cf2a4cc0603820520772aadf0f",
+  "feature_schema_version": "v1.0",
+  "trained_at": "2026-09-30T05:51:47.721403+00:00",
   "dataset_path": "demo_loan_data.csv",
   "dataset_size": 6000,
   "train_size": 4800,
+  "candidate_fit_size": 3600,
+  "validation_size": 1200,
+  "train_plus_validation_size": 4800,
   "test_size": 1200,
+  "model_selection_metric": "0.6 \u00d7 ROC-AUC + 0.4 \u00d7 PR-AUC on validation split",
+  "selected_model_validation_metrics": {
+    "accuracy": 0.8417,
+    "precision": 0.7297,
+    "recall": 0.4186,
+    "sensitivity": 0.4186,
+    "specificity": 0.9575,
+    "false_positive_rate": 0.0425,
+    "false_negative_rate": 0.5814,
+    "f1_score": 0.532,
+    "roc_auc": 0.8383,
+    "pr_auc": 0.6518,
+    "brier_score": 0.1158,
+    "selection_score": 0.7637,
+    "training_time_seconds": 0.018
+  },
   "features": [
     "age",
     "annual_income",
@@ -25,61 +46,74 @@
   "target": "loan_default",
   "random_seed": 42,
   "metrics": {
-    "accuracy": 0.8658,
-    "precision": 0.8224,
-    "recall": 0.4826,
-    "f1_score": 0.6083,
-    "roc_auc": 0.8626,
-    "training_time_seconds": 0.033
+    "accuracy": 0.865,
+    "precision": 0.8299,
+    "recall": 0.471,
+    "sensitivity": 0.471,
+    "specificity": 0.9734,
+    "false_positive_rate": 0.0266,
+    "false_negative_rate": 0.529,
+    "f1_score": 0.601,
+    "roc_auc": 0.8623,
+    "pr_auc": 0.7205,
+    "brier_score": 0.1047,
+    "calibration_method": "sigmoid/Platt scaling (3-fold CV on train+validation)",
+    "evaluation_population": "untouched synthetic test split; not external validation"
+  },
+  "calibration": {
+    "method": "sigmoid",
+    "folds": 3,
+    "evaluation_split": "untouched stratified test split",
+    "evidence": "synthetic dataset only; not independently validated"
   },
   "feature_importance": [
     {
       "feature": "num__credit_score",
-      "importance": 1.00575
+      "importance": 0.98177
     },
     {
       "feature": "num__debt_to_income_ratio",
-      "importance": 0.8437
-    },
-    {
-      "feature": "cat__employment_type_Salaried",
-      "importance": 0.55543
-    },
-    {
-      "feature": "cat__employment_type_Self-Employed",
-      "importance": 0.49759
-    },
-    {
-      "feature": "num__previous_default",
-      "importance": 0.43975
+      "importance": 0.84207
     },
     {
       "feature": "cat__employment_type_Unemployed",
-      "importance": 0.4065
+      "importance": 0.55048
     },
     {
-      "feature": "cat__employment_type_Business Owner",
-      "importance": 0.35929
+      "feature": "num__previous_default",
+      "importance": 0.42962
     },
     {
-      "feature": "cat__requested_loan_purpose_Personal",
-      "importance": 0.327
+      "feature": "cat__employment_type_Self-Employed",
+      "importance": 0.30672
+    },
+    {
+      "feature": "cat__employment_type_Salaried",
+      "importance": 0.29848
     },
     {
       "feature": "num__employment_years",
-      "importance": 0.27428
-    },
-    {
-      "feature": "cat__requested_loan_purpose_Education",
-      "importance": 0.26138
-    },
-    {
-      "feature": "num__annual_income",
-      "importance": 0.24546
+      "importance": 0.28902
     },
     {
       "feature": "num__loan_amount",
-      "importance": 0.23666
+      "importance": 0.2503
+    },
+    {
+      "feature": "num__annual_income",
+      "importance": 0.24588
+    },
+    {
+      "feature": "num__savings_amount",
+      "importance": 0.19536
+    },
+    {
+      "feature": "cat__requested_loan_purpose_Personal",
+      "importance": 0.18299
+    },
+    {
+      "feature": "cat__requested_loan_purpose_Medical",
+      "importance": 0.17879
     }
   ],
   "feature_importance_method": "absolute value of logistic regression coefficients",

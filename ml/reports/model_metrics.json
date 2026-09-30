@@ -1,9 +1,16 @@
 {
   "selected_model": "Logistic Regression",
-  "accuracy": 0.8658,
-  "precision": 0.8224,
-  "recall": 0.4826,
-  "f1_score": 0.6083,
-  "roc_auc": 0.8626,
-  "training_time_seconds": 0.033
+  "accuracy": 0.865,
+  "precision": 0.8299,
+  "recall": 0.471,
+  "sensitivity": 0.471,
+  "specificity": 0.9734,
+  "false_positive_rate": 0.0266,
+  "false_negative_rate": 0.529,
+  "f1_score": 0.601,
+  "roc_auc": 0.8623,
+  "pr_auc": 0.7205,
+  "brier_score": 0.1047,
+  "calibration_method": "sigmoid/Platt scaling (3-fold CV on train+validation)",
+  "evaluation_population": "untouched synthetic test split; not external validation"
 }

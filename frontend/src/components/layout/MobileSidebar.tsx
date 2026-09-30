@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { X } from "lucide-react";
 import {
   LayoutDashboard, FileSpreadsheet, ListChecks, BarChart3, Brain,
-  Link2, ShieldCheck, Settings as SettingsIcon,
+  Link2, ShieldCheck, Settings as SettingsIcon, Activity, Wallet,
 } from "lucide-react";
 
 const navItems = [
@@ -11,6 +11,8 @@ const navItems = [
   { to: "/applications", label: "Applications", icon: ListChecks },
   { to: "/analytics", label: "Analytics", icon: BarChart3 },
   { to: "/model", label: "Model Analytics", icon: Brain },
+  { to: "/model-monitoring", label: "Model Monitoring", icon: Activity },
+  { to: "/loans", label: "Loan Lifecycle", icon: Wallet },
   { to: "/blockchain", label: "Blockchain", icon: Link2 },
   { to: "/verify", label: "Verify Record", icon: ShieldCheck },
   { to: "/settings", label: "Settings", icon: SettingsIcon },

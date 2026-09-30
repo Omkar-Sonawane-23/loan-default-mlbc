@@ -39,5 +39,15 @@ class PredictionResult(BaseModel):
     risk_category: Literal["LOW", "MEDIUM", "HIGH"]
     model_name: str
     model_version: str
+    model_hash: str = ""
+    feature_schema_version: str = "v1.0"
+    credit_score: int = Field(..., ge=0, le=1000)
+    credit_score_method: str = ""
+    credit_score_validity: str = ""
+    expected_loss: float = Field(..., ge=0)
+    expected_loss_assumptions: dict = {}
+    storage_status: str = "UNAVAILABLE"
+    explanation_scope: str = ""
+    local_explanation: dict = {}
     risk_factors: list[dict] = []
     disclaimer: str

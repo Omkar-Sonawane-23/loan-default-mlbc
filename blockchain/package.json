@@ -7,14 +7,16 @@
     "test": "hardhat test",
     "node": "hardhat node",
     "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:lifecycle:local": "hardhat run scripts/deploy-lifecycle.ts --network localhost",
     "verify:local": "hardhat run scripts/verify-local.ts --network localhost"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/node": "^20.11.0",
     "hardhat": "^2.22.0",
-    "typescript": "^5.4.0",
+    "solc": "^0.8.24",
     "ts-node": "^10.9.2",
-    "@types/node": "^20.11.0"
+    "typescript": "^5.4.0"
   },
   "license": "MIT"
 }

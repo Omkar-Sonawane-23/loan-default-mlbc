@@ -52,6 +52,14 @@ class Database:
         model_metadata = self.db.model_metadata
         model_metadata.create_index([("model_version", ASCENDING)])
 
+        model_predictions = self.db.model_predictions
+        model_predictions.create_index([("created_at", DESCENDING)])
+        model_predictions.create_index([("model_version", ASCENDING), ("created_at", DESCENDING)])
+
+        loan_lifecycle = self.db.loan_lifecycle
+        loan_lifecycle.create_index([("loan_id", ASCENDING)], unique=True)
+        loan_lifecycle.create_index([("contract_state", ASCENDING), ("updated_at", DESCENDING)])
+
 
 database = Database()
 
