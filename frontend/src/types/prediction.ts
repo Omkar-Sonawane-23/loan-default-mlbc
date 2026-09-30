@@ -7,6 +7,12 @@ export interface PredictionResult {
   risk_category: RiskCategory;
   model_name: string;
   model_version: string;
+  model_hash?: string;
+  credit_score?: number;
+  expected_loss?: number;
+  local_explanation?: { status: string; method?: string; target?: string; contributors: { feature: string; impact: number }[] };
+  explanation_scope?: string;
+  storage_status?: string;
   risk_factors: { feature: string; importance: number }[];
   disclaimer: string;
 }

@@ -20,6 +20,7 @@ blockchain/cache/
 blockchain/artifacts/
 blockchain/typechain-types/
 blockchain/deployed-address.json
+blockchain/loan-lifecycle-address.json
 
 # Environment
 .env

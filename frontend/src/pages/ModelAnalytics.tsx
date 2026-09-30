@@ -25,11 +25,14 @@ export default function ModelAnalytics() {
   if (!info || !metrics) return null;
 
   const metricRows = [
-    ["Accuracy", metrics.metrics.accuracy],
-    ["Precision", metrics.metrics.precision],
-    ["Recall", metrics.metrics.recall],
-    ["F1 Score", metrics.metrics.f1_score],
-    ["ROC-AUC", metrics.metrics.roc_auc],
+    ["Accuracy", metrics.metrics.accuracy, "percent"],
+    ["Precision", metrics.metrics.precision, "percent"],
+    ["Recall", metrics.metrics.recall, "percent"],
+    ["F1 Score", metrics.metrics.f1_score, "percent"],
+    ["ROC-AUC", metrics.metrics.roc_auc, "percent"],
+    ["PR-AUC", metrics.metrics.pr_auc, "percent"],
+    ["Brier score ↓", metrics.metrics.brier_score, "decimal"],
+    ["Specificity", metrics.metrics.specificity, "percent"],
   ];
 
   return (
@@ -44,7 +47,9 @@ export default function ModelAnalytics() {
               <div><div className="text-xs text-slate-400">Model Name</div><div className="font-medium">{info.model_name}</div></div>
               <div><div className="text-xs text-slate-400">Model Version</div><div className="font-medium">{info.model_version}</div></div>
               <div><div className="text-xs text-slate-400">Training Date</div><div className="font-medium">{formatDateTime(info.trained_at)}</div></div>
-              <div><div className="text-xs text-slate-400">Dataset Size</div><div className="font-medium">{info.dataset_size?.toLocaleString()} records</div></div>
+              <div><div className="text-xs text-slate-400">Dataset Size</div><div className="font-medium">{info.dataset_size?.toLocaleString()} synthetic records</div></div>
+              <div><div className="text-xs text-slate-400">Calibration</div><div className="font-medium">{info.calibration?.method || "Not reported"} · {info.calibration?.folds ?? "—"} folds</div></div>
+              <div className="sm:col-span-2"><div className="text-xs text-slate-400">Model artifact SHA-256</div><div className="font-mono text-xs break-all">{info.artifact_sha256}</div></div>
             </div>
             <div className="mt-4">
               <div className="text-xs text-slate-400 mb-1">Candidate Models Compared</div>
@@ -59,11 +64,12 @@ export default function ModelAnalytics() {
           </div>
 
           <div className="card p-5">
-            <h3 className="text-sm font-semibold text-slate-900 mb-4">Model Evaluation Metrics</h3>
+            <h3 className="text-sm font-semibold text-slate-900 mb-1">Calibrated test-set metrics</h3>
+            <p className="text-xs text-slate-500 mb-4">Untouched synthetic test split; not external validation.</p>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-              {metricRows.map(([label, value]) => (
+              {metricRows.map(([label, value, format]) => (
                 <div key={label as string} className="text-center p-3 rounded-lg bg-slate-50">
-                  <div className="text-lg font-semibold text-accent-600">{((value as number) * 100).toFixed(1)}%</div>
+                  <div className="text-lg font-semibold text-accent-600">{format === "percent" ? `${((value as number) * 100).toFixed(1)}%` : (value as number).toFixed(3)}</div>
                   <div className="text-[10px] text-slate-500 mt-0.5">{label}</div>
                 </div>
               ))}
@@ -71,12 +77,13 @@ export default function ModelAnalytics() {
           </div>
 
           <div className="card p-5">
-            <h3 className="text-sm font-semibold text-slate-900 mb-4">Model Comparison</h3>
+            <h3 className="text-sm font-semibold text-slate-900 mb-1">Candidate model validation comparison</h3>
+            <p className="text-xs text-slate-500 mb-4">Uncalibrated candidates; model selection used 0.6 ROC-AUC + 0.4 PR-AUC on validation data.</p>
             <div className="overflow-x-auto">
               <table className="table-base">
                 <thead>
                   <tr>
-                    <th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th>
+                    <th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th><th>PR-AUC</th><th>Brier ↓</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -88,6 +95,8 @@ export default function ModelAnalytics() {
                       <td>{(m.recall * 100).toFixed(1)}%</td>
                       <td>{(m.f1_score * 100).toFixed(1)}%</td>
                       <td>{(m.roc_auc * 100).toFixed(1)}%</td>
+                      <td>{(m.pr_auc * 100).toFixed(1)}%</td>
+                      <td>{m.brier_score?.toFixed(3) ?? "—"}</td>
                     </tr>
                   ))}
                 </tbody>

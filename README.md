@@ -55,9 +55,19 @@ assessment hasn't been tampered with after the fact. This project builds:
 4. A **React frontend** presenting all of the above as a professional,
    internal fintech-style application.
 
+## Product scope and implementation status
+
+This repository remains an academic research/demo application, not a production credit-decision service. The current build includes local SHAP explanations, sigmoid-calibrated default probabilities trained/evaluated on synthetic data, a derived demo risk index, an ETH-denominated Solidity loan lifecycle, injected-wallet transaction UX, MongoDB transaction indexing and reconciliation, and on-chain contract-derived repayment reputation. The end-to-end local-EVM plus FastAPI/Mongo-mock scenario is tested. It is not validated for real borrowers, stablecoin/fiat lending, or production use. There is still no authentication/RBAC, and a hash/calibration does not prove prediction correctness. Human review is required.
+
+The repository analysis and upgrade notes are in [docs/UPGRADE_PLAN.md](docs/UPGRADE_PLAN.md). Credit-risk metrics/calibration use a held-out synthetic test split only; the derived 0–1000 score is a research index, not a bureau score or externally validated measure. The loan lifecycle transfers native test-chain currency (ETH on Hardhat), not rupees or stablecoins. Wallet actions require an injected wallet on the configured chain. Reconciliation indexes confirmed contract events into MongoDB and compares snapshots with current state; it is demo-grade and not authenticated. PSI monitoring remains a screening signal, not outcome performance or fairness monitoring. SHAP scope and the on-chain loan contract are documented in [docs/explainability.md](docs/explainability.md) and [docs/loan-lifecycle.md](docs/loan-lifecycle.md).
+
 ## Features
 
-- Real-time ML risk prediction with model-derived explanations
+- Real-time calibrated-on-synthetic ML probability with local SHAP log-odds contributions and global feature importance clearly separated
+- Human-readable demo risk index and assumption-labeled expected loss
+- MetaMask/injected EVM wallet connection, chain/balance display, and real transaction confirmation UX
+- Solidity loan states, agreement acknowledgement, ETH funding, partial/full repayments, defaults, and contract-derived reputation
+- Confirmed transaction indexing and database ↔ chain reconciliation dashboard
 - Full application lifecycle management (create, view, edit, status,
   delete) with search, filtering, sorting, and pagination
 - Complete audit trail per application
@@ -80,10 +90,12 @@ ML Service (scikit-learn)   MongoDB
       v
 Risk Prediction
       |
-FastAPI --- web3.py --->  Hardhat Local Blockchain
-                                |
-                                v
-                        LoanRecordRegistry.sol
+FastAPI --- web3.py ---> Hardhat / configured EVM
+      |                         |
+      v                         +-- LoanRecordRegistry.sol (hash proof)
+MongoDB                     +-- LoanLifecycle.sol (loan state, ETH, reputation)
+      ^                         |
+      +---- verified event snapshots/reconciliation
 ```
 
 See `docs/architecture.md` for the detailed request flow.
@@ -255,7 +267,8 @@ cd blockchain
 npm install
 npm run compile
 npx hardhat node            # keep running in its own terminal
-npm run deploy:local        # in a second terminal
+npm run deploy:local        # hash registry
+npm run deploy:lifecycle:local # separate loan lifecycle contract; outputs local address
 ```
 
 **4. Backend**
@@ -278,8 +291,11 @@ python scripts/seed_mongodb.py --register-on-chain
 cd frontend
 npm install
 cp .env.example .env
+# Set VITE_LOAN_LIFECYCLE_ADDRESS from blockchain/loan-lifecycle-address.json
 npm run dev
 ```
+
+For the `/loans` demo connect an injected wallet configured for chain `31337` and a compatible RPC endpoint. Contract actions use native test currency only. Keep the local Hardhat node running; its pre-funded test keys are public and never safe for real funds.
 
 ## Complete Run Instructions
 
@@ -293,7 +309,7 @@ docker compose up mongodb
 cd blockchain && npx hardhat node
 
 # Terminal 3 (after terminal 2 is running)
-cd blockchain && npm run deploy:local
+cd blockchain && npm run deploy:local && npm run deploy:lifecycle:local
 cd ../backend && source .venv/bin/activate && uvicorn app.main:app --reload
 
 # Terminal 4
@@ -305,11 +321,11 @@ Then open `http://localhost:5173`.
 ## Testing
 
 ```bash
-# Smart contract tests (8 tests)
+# Smart contract tests (15 tests)
 cd blockchain && npm test
 
-# Backend tests (31 tests; blockchain tests need the Hardhat node from
-# above running, and the contract deployed)
+# Backend tests (includes real local EVM transaction/reconciliation test;
+# lifecycle and registry deployments must be available for chain tests)
 cd backend && pytest
 
 # Frontend type-check + build

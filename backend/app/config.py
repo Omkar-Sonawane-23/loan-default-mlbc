@@ -18,12 +18,16 @@ class Settings:
     BLOCKCHAIN_RPC_URL: str = os.getenv("BLOCKCHAIN_RPC_URL", "http://127.0.0.1:8545")
     BLOCKCHAIN_PRIVATE_KEY: str = os.getenv("BLOCKCHAIN_PRIVATE_KEY", "")
     BLOCKCHAIN_CONTRACT_ADDRESS: str = os.getenv("BLOCKCHAIN_CONTRACT_ADDRESS", "")
+    LOAN_LIFECYCLE_CONTRACT_ADDRESS: str = os.getenv("LOAN_LIFECYCLE_CONTRACT_ADDRESS", "")
     BLOCKCHAIN_CHAIN_ID: int = int(os.getenv("BLOCKCHAIN_CHAIN_ID", "31337"))
+    BLOCKCHAIN_START_BLOCK: int | None = int(os.environ["BLOCKCHAIN_START_BLOCK"]) if os.getenv("BLOCKCHAIN_START_BLOCK") else None
 
     # ML
     MODEL_PATH: str = os.getenv("MODEL_PATH", "../ml/models/loan_default_model.joblib")
     MODEL_METADATA_PATH: str = os.getenv("MODEL_METADATA_PATH", "../ml/models/model_metadata.json")
     MODEL_VERSION: str = os.getenv("MODEL_VERSION", "rf-v1")
+    # Demonstration assumption only; configure after validation for any use beyond research.
+    LOSS_GIVEN_DEFAULT: float = float(os.getenv("LOSS_GIVEN_DEFAULT", "0.45"))
 
     # CORS
     CORS_ORIGINS: list = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")

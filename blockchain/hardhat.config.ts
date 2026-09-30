@@ -1,5 +1,20 @@
-import { HardhatUserConfig } from "hardhat/config";
+import { HardhatUserConfig, subtask } from "hardhat/config";
+import { TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD } from "hardhat/builtin-tasks/task-names";
 import "@nomicfoundation/hardhat-toolbox";
+
+// Use the pinned local solc package for repeatable/offline builds.
+subtask(TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD).setAction(async ({ solcVersion }, _hre, runSuper) => {
+  if (solcVersion === "0.8.24") {
+    const solc = require("solc");
+    return {
+      compilerPath: require.resolve("solc/soljson.js"),
+      isSolcJs: true,
+      version: solcVersion,
+      longVersion: solc.version(),
+    };
+  }
+  return runSuper();
+});
 
 // LoanDefault MLBC - academic project.
 // Local-only network configuration. No real private keys are ever used

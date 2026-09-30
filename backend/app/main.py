@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.database import database
-from app.api import health, model, predictions, applications, dashboard, analytics, blockchain, export
+from app.api import health, model, predictions, applications, dashboard, analytics, blockchain, export, model_monitoring, loan_lifecycle
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("loan_default_mlbc")
@@ -51,7 +51,8 @@ app.add_middleware(
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception):
     logger.exception("Unhandled exception")
-    return JSONResponse(status_code=500, content={"detail": f"Internal server error: {exc}"})
+    # Keep implementation details (database URLs, paths, provider errors) out of client responses.
+    return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
 
 app.include_router(health.router, prefix="/api")
@@ -62,6 +63,8 @@ app.include_router(dashboard.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api")
 app.include_router(blockchain.router, prefix="/api")
 app.include_router(export.router, prefix="/api")
+app.include_router(model_monitoring.router, prefix="/api")
+app.include_router(loan_lifecycle.router, prefix="/api")
 
 
 @app.get("/")
