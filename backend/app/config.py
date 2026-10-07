@@ -12,7 +12,7 @@ class Settings:
 
     # Backend
     BACKEND_HOST: str = os.getenv("BACKEND_HOST", "127.0.0.1")
-    BACKEND_PORT: int = int(os.getenv("BACKEND_PORT", "8000"))
+    BACKEND_PORT: int = int(os.getenv("BACKEND_PORT", "8001"))
 
     # Blockchain
     BLOCKCHAIN_RPC_URL: str = os.getenv("BLOCKCHAIN_RPC_URL", "http://127.0.0.1:8545")
